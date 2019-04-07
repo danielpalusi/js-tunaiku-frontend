@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Tunaiku Technical Test </title>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body>
+	<div id="app">
+		<div class='container-fluid-nav text-center'>
+			<nav class="navbar navbar-expand-sm bg-light navbar-light fixed-top">
+				<div class="container-fluid">
+					<ul class="nav navbar-nav pull-xs-left">
+						<li class="nav-item">
+							<form class="form-inline" action="#">
+								<input class="form-control mr-sm-2" type="text" placeholder="Search Movie">
+							</form>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav">
+						<a class="navbar-brand" href="#">starwars<b>movie</b></a>
+					</ul>
+					<ul class="nav navbar-nav pull-xs-right">
+						<li class="nav-item">
+							<div>
+								<button class="navbar" type="button" data-toggle="collapse" data-target="#navbar6" aria-controls="navbar6" aria-expanded="false" aria-label="Toggle navigation">
+									<span class="navbar-toggler-icon"></span>
+								</button>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+		<div class='container-fluid'>
+			<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+				<div class="carousel-inner" role="listbox">
+					<div class="carousel-item active">
+						<div class="carousel-caption d-none d-md-block">
+							<span><button type="button" class="btn btn-outline-warning" @click="swGoogle()">See Movie</button></span>
+						</div>
+						<img class="d-block img-fluid" src="sw1.jpg" alt="First slide">
+					</div>
+					<div class="carousel-item">
+						<div class="carousel-caption d-none d-md-block">
+							<span><button type="button" class="btn btn-outline-warning" @click="swGoogle()">See Movie</button></span>
+						</div>
+						<img class="d-block img-fluid" src="sw2.jpg" alt="Second slide">
+					</div>
+					<div class="carousel-item">
+						<div class="carousel-caption d-none d-md-block">
+							<span><button type="button" class="btn btn-outline-warning" @click="swGoogle()">See Movie</button></span>
+						</div>
+						<img class="d-block img-fluid" src="sw3.jpg" alt="Third slide">
+					</div>
+				</div>
+				<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="sr-only">Previous</span>
+				</a>
+				<a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="sr-only">Next</span>
+				</a>
+			</div>
+		</div>
+		<div class='container-fluid'>
+			<div class ="row">
+				<div class="col-md-3">
+					<br> 
+					<h5>Recently Activities</h5>
+					<ul class="list-unstyled components">
+						<li v-if="sw.ep1.rate>100">You like Starwars Ep-{{sw.ep1.episode_id}}-<i>{{sw.ep1.title}}</i></li>
+						<li v-if="sw.ep2.rate>100">You like Starwars Ep-{{sw.ep2.episode_id}}-<i>{{sw.ep2.title}}</i></li>
+						<li v-if="sw.ep3.rate>100">You like Starwars Ep-{{sw.ep3.episode_id}}-<i>{{sw.ep3.title}}</i></li>
+						<li v-if="sw.ep4.rate>100">You like Starwars Ep-{{sw.ep4.episode_id}}-<i>{{sw.ep4.title}}</i></li>
+						<li v-if="sw.ep5.rate>100">You like Starwars Ep-{{sw.ep5.episode_id}}-<i>{{sw.ep5.title}}</i></li>
+						<li v-if="sw.ep6.rate>100">You like Starwars Ep-{{sw.ep6.episode_id}}-<i>{{sw.ep6.title}}</i></li>
+						<li v-if="sw.ep7.rate>100">You like Starwars Ep-{{sw.ep7.episode_id}}-<i>{{sw.ep7.title}}</i></li>
+					</ul>
+				</div>
+				<div class="col-md-9">
+					<div id="menuTab">
+						<ul class="nav nav-tabs" id="myTab" role="tablist">
+							<li class="nav-item">
+								<a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="true">All Movies</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" id="phi-tab" data-toggle="tab" href="#phi" role="tab" aria-controls="phi" aria-selected="false">You Liked</a>
+							</li>
+						</ul>
+						<div class="tab-content" id="myTabContent">
+							<div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+								<br>
+								<div class="row" id="everythings">
+									<div class="col-md-6" v-for="(value, index) in sw">
+										<div class="card">
+											<img class="card-img-top" :src="sw[index]['linkImage']" id="cimg" alt="Card image cap" :title="sw[index]['opening_crawl']">
+											<div class="card-body">
+												<h5 class="card-title">Star Wars Ep-{{sw[index]['episode_id']}}-<i>{{sw[index]['title']}}</i></h5>
+												<p class="card-text">
+													<div class="table-responsive">
+														<table class="table table-borderless">
+															<tbody>
+																<tr>
+																	<td><b>Director</b></td>
+																	<td>{{sw[index]['director']}}</td>
+																</tr>
+																<tr>
+																	<td><b>Producer</b></td>
+																	<td>{{sw[index]['producer']}}</td>
+																</tr>
+																<tr>
+																	<td><b>Release Date</b></td>
+																	<td>{{sw[index]['release_date']}}</td>
+																</tr>
+																<tr v-if="sw[index]['isOpen']==1">
+																	<td><b>Characters</b></td>
+																	<td>
+																		<span v-for="(character,i) in sw[index]['characters']">
+																			<span v-if="i>0">{{ ', ' }}</span>
+																			<span class="text-nowrap">{{ character }}</span>
+																		</span>
+																	</td>
+																</tr>
+																<tr v-if="sw[index]['isOpen']==1">
+																	<td><b>Planets</b></td>
+																	<td>
+																		<span v-for="(planet,i) in sw[index]['planets']">
+																			<span v-if="i>0">{{ ', ' }}</span>
+																			<span class="text-nowrap">{{ planet }}</span>
+																		</span>
+																	</td>
+																</tr>
+																<tr v-if="sw[index]['isOpen']==1">
+																	<td><b>Starships</b></td>
+																	<td>
+																		<span v-for="(starship,i) in sw[index]['starships']">
+																			<span v-if="i>0">{{ ', ' }}</span>
+																			<span class="text-nowrap">{{ starship }}</span>
+																		</span>
+																	</td>
+																</tr>
+																<tr v-if="sw[index]['isOpen']==1">
+																	<td><b>Vehicles</b></td>
+																	<td>
+																		<span v-for="(vehicle,i) in sw[index]['vehicles']">
+																			<span v-if="i>0">{{ ', ' }}</span>
+																			<span class="text-nowrap">{{ vehicle }}</span>
+																		</span>
+																	</td>
+																</tr>
+																<tr v-if="sw[index]['isOpen']==1">
+																	<td><b>Species</b></td>
+																	<td>
+																		<span v-for="(spec,i) in sw[index]['species']">
+																			<span v-if="i>0">{{ ', ' }}</span>
+																			<span class="text-nowrap">{{ spec }}</span>
+																		</span>
+																	</td>
+																</tr>
+																<tr v-if="sw[index]['isOpen']==0">
+																	<td><button type="button" class="btn btn" @click="viewDetail(index,1)">See Detail</button></td>
+																</tr>
+																<tr v-else>
+																	<td><button type="button" class="btn btn" @click="viewDetail(index,0)">See Less</button></td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+												</p>
+												<p>Rate: <span v-if="sw[index]['rate']!==100">You and</span> {{sw[index]['rate']}} voters like this</p>
+												<div v-if="sw[index]['rate']==100">
+													<button type="button" class="btn btn-info" @click="rateSw(index,1)">Like!</button>
+												</div>
+												<div v-else>
+													<button type="button" class="btn btn-danger" @click="rateSw(index,0)">Unlike!</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="phi" role="tabpanel" aria-labelledby="phi-tab">
+								<br>
+								<div class="row" id="onlyPhilosophy">
+									<div class="col-md-6" v-for="(value, index) in sw">
+										<div v-if="sw[index]['rate']>100" class="card">
+											<img class="card-img-top" :src="sw[index]['linkImage']" id="cimg" alt="Card image cap" :title="sw[index]['opening_crawl']">
+											<div class="card-body">
+												<h5 class="card-title">Star Wars Ep-{{sw[index]['episode_id']}}-<i>{{sw[index]['title']}}</i></h5>
+												<p class="card-text">
+													<div class="table-responsive">
+														<table class="table table-borderless">
+															<tbody>
+																<tr>
+																	<td><b>Director</b></td>
+																	<td>{{sw[index]['director']}}</td>
+																</tr>
+																<tr>
+																	<td><b>Producer</b></td>
+																	<td>{{sw[index]['producer']}}</td>
+																</tr>
+																<tr>
+																	<td><b>Release Date</b></td>
+																	<td>{{sw[index]['release_date']}}</td>
+																</tr>
+																<tr v-if="sw[index]['isOpen']==1">
+																	<td><b>Characters</b></td>
+																	<td>
+																		<span v-for="(character,i) in sw[index]['characters']">
+																			<span v-if="i>0">{{ ', ' }}</span>
+																			<span class="text-nowrap">{{ character }}</span>
+																		</span>
+																	</td>
+																</tr>
+																<tr v-if="sw[index]['isOpen']==1">
+																	<td><b>Planets</b></td>
+																	<td>
+																		<span v-for="(planet,i) in sw[index]['planets']">
+																			<span v-if="i>0">{{ ', ' }}</span>
+																			<span class="text-nowrap">{{ planet }}</span>
+																		</span>
+																	</td>
+																</tr>
+																<tr v-if="sw[index]['isOpen']==1">
+																	<td><b>Starships</b></td>
+																	<td>
+																		<span v-for="(starship,i) in sw[index]['starships']">
+																			<span v-if="i>0">{{ ', ' }}</span>
+																			<span class="text-nowrap">{{ starship }}</span>
+																		</span>
+																	</td>
+																</tr>
+																<tr v-if="sw[index]['isOpen']==1">
+																	<td><b>Vehicles</b></td>
+																	<td>
+																		<span v-for="(vehicle,i) in sw[index]['vehicles']">
+																			<span v-if="i>0">{{ ', ' }}</span>
+																			<span class="text-nowrap">{{ vehicle }}</span>
+																		</span>
+																	</td>
+																</tr>
+																<tr v-if="sw[index]['isOpen']==1">
+																	<td><b>Species</b></td>
+																	<td>
+																		<span v-for="(spec,i) in sw[index]['species']">
+																			<span v-if="i>0">{{ ', ' }}</span>
+																			<span class="text-nowrap">{{ spec }}</span>
+																		</span>
+																	</td>
+																</tr>
+																<tr v-if="sw[index]['isOpen']==0">
+																	<td><button type="button" class="btn btn" @click="viewDetail(index,1)">See Detail</button></td>
+																</tr>
+																<tr v-else>
+																	<td><button type="button" class="btn btn" @click="viewDetail(index,0)">See Less</button></td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+												</p>
+												<p>Rate: <span v-if="sw[index]['rate']!==100">You and</span> {{sw[index]['rate']}} voters like this</p>
+												<div v-if="sw[index]['rate']==100">
+													<button type="button" class="btn btn-info" @click="rateSw(index,1)">Like!</button>
+												</div>
+												<div v-else>
+													<button type="button" class="btn btn-danger" @click="rateSw(index,0)">Unlike!</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+		  		</div>
+	  		</div>
+	  	</div>
+	</div>
+</body>
+<script type="text/javascript">
+	var vm = new Vue({
+		el: '#app',
+		data: {
+			sw: {
+				ep1: {
+					url: 'https://swapi.co/api/films/4/',
+					linkImage: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/40/Star_Wars_Phantom_Menace_poster.jpg/220px-Star_Wars_Phantom_Menace_poster.jpg',
+					rate: 100,
+					isOpen: 0,
+					title: '',
+					episode_id:'',
+					opening_crawl: '',
+					director: '',
+					producer: '',
+					release_date: '',
+					characters: [],
+					planets: [],
+					starships: [],
+					vehicles: [],
+					species: []
+				},
+				ep2: {
+					url: 'https://swapi.co/api/films/5/',
+					linkImage: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/32/Star_Wars_-_Episode_II_Attack_of_the_Clones_%28movie_poster%29.jpg/220px-Star_Wars_-_Episode_II_Attack_of_the_Clones_%28movie_poster%29.jpg',
+					rate: 100,
+					isOpen: 0,
+					title: '',
+					episode_id:'',
+					opening_crawl: '',
+					director: '',
+					producer: '',
+					release_date: '',
+					characters: [],
+					planets: [],
+					starships: [],
+					vehicles: [],
+					species: []
+				},
+				ep3: {
+					url: 'https://swapi.co/api/films/6/',
+					linkImage: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/93/Star_Wars_Episode_III_Revenge_of_the_Sith_poster.jpg/220px-Star_Wars_Episode_III_Revenge_of_the_Sith_poster.jpg',
+					rate: 100,
+					isOpen: 0,
+					title: '',
+					episode_id:'',
+					opening_crawl: '',
+					director: '',
+					producer: '',
+					release_date: '',
+					characters: [],
+					planets: [],
+					starships: [],
+					vehicles: [],
+					species: []
+				},
+				ep4: {
+					url: 'https://swapi.co/api/films/1/',
+					linkImage: 'https://upload.wikimedia.org/wikipedia/en/thumb/8/87/StarWarsMoviePoster1977.jpg/220px-StarWarsMoviePoster1977.jpg',
+					rate: 100,
+					isOpen: 0,
+					title: '',
+					episode_id:'',
+					opening_crawl: '',
+					director: '',
+					producer: '',
+					release_date: '',
+					characters: [],
+					planets: [],
+					starships: [],
+					vehicles: [],
+					species: []
+				},
+				ep5: {
+					url: 'https://swapi.co/api/films/2/',
+					linkImage: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/3c/SW_-_Empire_Strikes_Back.jpg/220px-SW_-_Empire_Strikes_Back.jpg',
+					rate: 100,
+					isOpen: 0,
+					title: '',
+					episode_id:'',
+					opening_crawl: '',
+					director: '',
+					producer: '',
+					release_date: '',
+					characters: [],
+					planets: [],
+					starships: [],
+					vehicles: [],
+					species: []
+				},
+				ep6: {
+					url: 'https://swapi.co/api/films/3/',
+					linkImage: 'https://upload.wikimedia.org/wikipedia/en/thumb/b/b2/ReturnOfTheJediPoster1983.jpg/220px-ReturnOfTheJediPoster1983.jpg',
+					rate: 100,
+					isOpen: 0,
+					title: '',
+					episode_id:'',
+					opening_crawl: '',
+					director: '',
+					producer: '',
+					release_date: '',
+					characters: [],
+					planets: [],
+					starships: [],
+					vehicles: [],
+					species: []
+				},
+				ep7: {
+					url: 'https://swapi.co/api/films/7/',
+					linkImage: 'https://upload.wikimedia.org/wikipedia/en/a/a2/Star_Wars_The_Force_Awakens_Theatrical_Poster.jpg',
+					rate: 100,
+					isOpen: 0,
+					title: '',
+					episode_id:'',
+					opening_crawl: '',
+					director: '',
+					producer: '',
+					release_date: '',
+					characters: [],
+					planets: [],
+					starships: [],
+					vehicles: [],
+					species: []
+				}
+			},
+		},
+		created () {
+		var axiosSpread = this
+		var linkPeople = []
+		var linkPlanets = []
+		var linkStarships = []
+		var linkVehicles = []
+		var linkSpecies = []
+		axios.get(this.sw.ep1.url)
+			.then(response => {
+				this.sw.ep1.title = response.data.title,
+				this.sw.ep1.opening_crawl = response.data.opening_crawl,
+				this.sw.ep1.director= response.data.director,
+				this.sw.ep1.producer= response.data.producer,
+				this.sw.ep1.release_date= response.data.release_date,
+				this.sw.ep1.episode_id= response.data.episode_id
+			})
+			.catch(error => {
+				console.log(error)
+			})
+		axios.get(this.sw.ep2.url)
+			.then(response => {
+				this.sw.ep2.title = response.data.title,
+				this.sw.ep2.opening_crawl = response.data.opening_crawl,
+				this.sw.ep2.director= response.data.director,
+				this.sw.ep2.producer= response.data.producer,
+				this.sw.ep2.release_date= response.data.release_date,
+				this.sw.ep2.episode_id= response.data.episode_id
+			})
+			.catch(error => {
+				console.log(error)
+			})
+		axios.get(this.sw.ep3.url)
+			.then(response => {
+				this.sw.ep3.title = response.data.title,
+				this.sw.ep3.opening_crawl = response.data.opening_crawl,
+				this.sw.ep3.director= response.data.director,
+				this.sw.ep3.producer= response.data.producer,
+				this.sw.ep3.release_date= response.data.release_date,
+				this.sw.ep3.episode_id= response.data.episode_id
+			})
+			.catch(error => {
+				console.log(error)
+			})
+		axios.get(this.sw.ep4.url)
+			.then(response => {
+				this.sw.ep4.title = response.data.title,
+				this.sw.ep4.opening_crawl = response.data.opening_crawl,
+				this.sw.ep4.director= response.data.director,
+				this.sw.ep4.producer= response.data.producer,
+				this.sw.ep4.release_date= response.data.release_date,
+				this.sw.ep4.episode_id= response.data.episode_id
+			})
+			.catch(error => {
+				console.log(error)
+			})
+		axios.get(this.sw.ep5.url)
+			.then(response => {
+				this.sw.ep5.title = response.data.title,
+				this.sw.ep5.opening_crawl = response.data.opening_crawl,
+				this.sw.ep5.director= response.data.director,
+				this.sw.ep5.producer= response.data.producer,
+				this.sw.ep5.release_date= response.data.release_date,
+				this.sw.ep5.episode_id= response.data.episode_id
+			})
+			.catch(error => {
+				console.log(error)
+			})
+		axios.get(this.sw.ep6.url)
+			.then(response => {
+				this.sw.ep6.title = response.data.title,
+				this.sw.ep6.opening_crawl = response.data.opening_crawl,
+				this.sw.ep6.director= response.data.director,
+				this.sw.ep6.producer= response.data.producer,
+				this.sw.ep6.release_date= response.data.release_date,
+				this.sw.ep6.episode_id= response.data.episode_id
+			})
+			.catch(error => {
+				console.log(error)
+			})
+		axios.get(this.sw.ep7.url)
+			.then(response => {
+				this.sw.ep7.title = response.data.title,
+				this.sw.ep7.opening_crawl = response.data.opening_crawl,
+				this.sw.ep7.director= response.data.director,
+				this.sw.ep7.producer= response.data.producer,
+				this.sw.ep7.release_date= response.data.release_date,
+				this.sw.ep7.episode_id= response.data.episode_id
+			})
+			.catch(error => {
+				console.log(error)
+			})
+		for(var i = 1; i <= 88; i++){
+			if(i!==17){
+				linkPeople[i] = 'https://swapi.co/api/people/'+i+'/',
+				axios.get(linkPeople[i])
+						.then(response => {
+							for (var j = 0; j < response.data.films.length; j++){
+								if(response.data.films[j]=='https://swapi.co/api/films/4/'){
+									axiosSpread.sw.ep1.characters.push(response.data.name)
+								}
+								else if(response.data.films[j]=='https://swapi.co/api/films/5/'){
+									axiosSpread.sw.ep2.characters.push(response.data.name)
+								}
+								else if(response.data.films[j]=='https://swapi.co/api/films/6/'){
+									axiosSpread.sw.ep3.characters.push(response.data.name)
+								}
+								else if(response.data.films[j]=='https://swapi.co/api/films/1/'){
+									axiosSpread.sw.ep4.characters.push(response.data.name)
+								}
+								else if(response.data.films[j]=='https://swapi.co/api/films/2/'){
+									axiosSpread.sw.ep5.characters.push(response.data.name)
+								}
+								else if(response.data.films[j]=='https://swapi.co/api/films/3/'){
+									axiosSpread.sw.ep6.characters.push(response.data.name)
+								}
+								else if(response.data.films[j]=='https://swapi.co/api/films/7/'){
+									axiosSpread.sw.ep7.characters.push(response.data.name)
+								}
+							}
+						})
+					.catch(error => {
+						console.log(error)
+					})
+			}
+		}
+		for(var i = 1; i <= 61; i++){
+			linkPlanets[i] = 'https://swapi.co/api/planets/'+i+'/',
+			axios.get(linkPlanets[i])
+				.then(response => {
+					for (var j = 0; j < response.data.films.length; j++){
+						if(response.data.films[j]=='https://swapi.co/api/films/4/'){
+							axiosSpread.sw.ep1.planets.push(response.data.name)
+						}
+						else if(response.data.films[j]=='https://swapi.co/api/films/5/'){
+							axiosSpread.sw.ep2.planets.push(response.data.name)
+						}
+						else if(response.data.films[j]=='https://swapi.co/api/films/6/'){
+							axiosSpread.sw.ep3.planets.push(response.data.name)
+						}
+						else if(response.data.films[j]=='https://swapi.co/api/films/1/'){
+							axiosSpread.sw.ep4.planets.push(response.data.name)
+						}
+						else if(response.data.films[j]=='https://swapi.co/api/films/2/'){
+							axiosSpread.sw.ep5.planets.push(response.data.name)
+						}
+						else if(response.data.films[j]=='https://swapi.co/api/films/3/'){
+							axiosSpread.sw.ep6.planets.push(response.data.name)
+						}
+						else if(response.data.films[j]=='https://swapi.co/api/films/7/'){
+							axiosSpread.sw.ep7.planets.push(response.data.name)
+						}
+					}
+				})
+				.catch(error => {
+					console.log(error)
+				})
+		}
+		for(var i = 1; i <= 37; i++){
+			if(i!==1&&i!==4&&i!==6&&i!==7&&i!==8&&i!==14&&i!==16&&i!==18&&i!==19&&i!==20&&i!==24&&i!==25&&i!==26&&i!==30&&i!==33&&i!==34&&i!==35&&i!==36&&i!==37&&i!==32&&i!==37){
+						linkStarships[i] = 'https://swapi.co/api/starships/'+i+'/',
+						axios.get(linkStarships[i])
+						.then(response => {
+							for (var j = 0; j < response.data.films.length; j++){
+								if(response.data.films[j]=='https://swapi.co/api/films/4/'){
+									axiosSpread.sw.ep1.starships.push(response.data.name)
+								}
+								else if(response.data.films[j]=='https://swapi.co/api/films/5/'){
+									axiosSpread.sw.ep2.starships.push(response.data.name)
+								}
+								else if(response.data.films[j]=='https://swapi.co/api/films/6/'){
+									axiosSpread.sw.ep3.starships.push(response.data.name)
+								}
+								else if(response.data.films[j]=='https://swapi.co/api/films/1/'){
+									axiosSpread.sw.ep4.starships.push(response.data.name)
+								}
+								else if(response.data.films[j]=='https://swapi.co/api/films/2/'){
+									axiosSpread.sw.ep5.starships.push(response.data.name)
+								}
+								else if(response.data.films[j]=='https://swapi.co/api/films/3/'){
+									axiosSpread.sw.ep6.starships.push(response.data.name)
+								}
+								else if(response.data.films[j]=='https://swapi.co/api/films/7/'){
+									axiosSpread.sw.ep7.starships.push(response.data.name)
+								}
+							}
+						})
+							.catch(error => {
+								console.log(error)
+							})
+			}
+		}
+		for(var i = 1; i <= 39; i++){
+			if(i!==1&&i!==2&&i!==3&&i!==5&&i!==9&&i!==10&&i!==11&&i!==12&&i!==13&&i!==15&&i!==17&&i!==21&&i!==22&&i!==23&&i!==27&&i!==28&&i!==29&&i!==31&&i!==32&&i!==39){
+				linkVehicles[i] = 'https://swapi.co/api/vehicles/'+i+'/',
+						axios.get(linkVehicles[i])
+							.then(response => {
+								for (var j = 0; j < response.data.films.length; j++){
+									if(response.data.films[j]=='https://swapi.co/api/films/4/'){
+										axiosSpread.sw.ep1.vehicles.push(response.data.name)
+									}
+									else if(response.data.films[j]=='https://swapi.co/api/films/5/'){
+										axiosSpread.sw.ep2.vehicles.push(response.data.name)
+									}
+									else if(response.data.films[j]=='https://swapi.co/api/films/6/'){
+										axiosSpread.sw.ep3.vehicles.push(response.data.name)
+									}
+									else if(response.data.films[j]=='https://swapi.co/api/films/1/'){
+										axiosSpread.sw.ep4.vehicles.push(response.data.name)
+									}
+									else if(response.data.films[j]=='https://swapi.co/api/films/2/'){
+										axiosSpread.sw.ep5.vehicles.push(response.data.name)
+									}
+									else if(response.data.films[j]=='https://swapi.co/api/films/3/'){
+										axiosSpread.sw.ep6.vehicles.push(response.data.name)
+									}
+									else if(response.data.films[j]=='https://swapi.co/api/films/7/'){
+										axiosSpread.sw.ep7.vehicles.push(response.data.name)
+									}
+								}
+							})
+							.catch(error => {
+								console.log(error)
+							})
+					}
+		}
+		for(var i = 1; i <= 37; i++){
+			linkSpecies[i] = 'https://swapi.co/api/species/'+i+'/',
+			axios.get(linkSpecies[i])
+				.then(response => {
+					for (var j = 0; j < response.data.films.length; j++){
+						if(response.data.films[j]=='https://swapi.co/api/films/4/'){
+							axiosSpread.sw.ep1.species.push(response.data.name)
+						}
+						else if(response.data.films[j]=='https://swapi.co/api/films/5/'){
+							axiosSpread.sw.ep2.species.push(response.data.name)
+						}
+						else if(response.data.films[j]=='https://swapi.co/api/films/6/'){
+							axiosSpread.sw.ep3.species.push(response.data.name)
+						}
+						else if(response.data.films[j]=='https://swapi.co/api/films/1/'){
+							axiosSpread.sw.ep4.species.push(response.data.name)
+						}
+						else if(response.data.films[j]=='https://swapi.co/api/films/2/'){
+							axiosSpread.sw.ep5.species.push(response.data.name)
+						}
+						else if(response.data.films[j]=='https://swapi.co/api/films/3/'){
+							axiosSpread.sw.ep6.species.push(response.data.name)
+						}
+						else if(response.data.films[j]=='https://swapi.co/api/films/7/'){
+							axiosSpread.sw.ep7.species.push(response.data.name)
+						}
+					}
+				})
+				.catch(error => {
+					console.log(error)
+				})
+		}
+		},
+		methods: {
+			swGoogle(){
+				location.href='https://www.starwars.com/'
+			},
+			rateSw(choice,num){
+				if (choice=='ep1') {
+					if (num==1) {
+						this.sw.ep1.rate += 1
+					}
+					else
+						this.sw.ep1.rate -= 1
+				}
+				else if (choice=='ep2') {
+					if (num==1) {
+						this.sw.ep2.rate += 1
+					}
+					else
+						this.sw.ep2.rate -= 1
+				}
+				else if (choice=='ep3') {
+					if (num==1) {
+						this.sw.ep3.rate += 1
+					}
+					else
+						this.sw.ep3.rate -= 1
+				}
+				else if (choice=='ep4') {
+					if (num==1) {
+						this.sw.ep4.rate += 1
+					}
+					else
+						this.sw.ep4.rate -= 1
+				}
+				else if (choice=='ep5') {
+					if (num==1) {
+						this.sw.ep5.rate += 1
+					}
+					else
+						this.sw.ep5.rate -= 1
+				}
+				else if (choice=='ep6') {
+					if (num==1) {
+						this.sw.ep6.rate += 1
+					}
+					else
+						this.sw.ep6.rate -= 1
+				}
+				else if (choice=='ep7') {
+					if (num==1) {
+						this.sw.ep7.rate += 1
+					}
+					else
+						this.sw.ep7.rate -= 1
+				}
+			},
+			viewDetail(choice,num){
+				if (choice=='ep1') {
+					if (num==1) {
+						this.sw.ep1.isOpen = 1
+					}
+					else
+						this.sw.ep1.isOpen = 0
+				}
+				else if (choice=='ep2') {
+					if (num==1) {
+						this.sw.ep2.isOpen = 1
+					}
+					else
+						this.sw.ep2.isOpen = 0
+				}
+				else if (choice=='ep3') {
+					if (num==1) {
+						this.sw.ep3.isOpen = 1
+					}
+					else
+						this.sw.ep3.isOpen = 0
+				}
+				else if (choice=='ep4') {
+					if (num==1) {
+						this.sw.ep4.isOpen = 1
+					}
+					else
+						this.sw.ep4.isOpen = 0
+				}
+				else if (choice=='ep5') {
+					if (num==1) {
+						this.sw.ep5.isOpen = 1
+					}
+					else
+						this.sw.ep5.isOpen = 0
+				}
+				else if (choice=='ep6') {
+					if (num==1) {
+						this.sw.ep6.isOpen = 1
+					}
+					else
+						this.sw.ep6.isOpen = 0
+				}
+				else if (choice=='ep7') {
+					if (num==1) {
+						this.sw.ep7.isOpen = 1
+					}
+					else
+						this.sw.ep7.isOpen = 0
+				}
+			}
+		}
+	})
+</script>
+<style type="text/css">
+	#cimg{
+		margin-left: 20px;
+		margin-top: 20px;
+		width : 222px;
+		height : 332px;
+	}
+	.carousel-inner > .item > img {
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	}
+</style>
+</html>
